@@ -35,7 +35,7 @@ struct GameplayConfiguration {
         static let movementSpeed: CGFloat = 210.0
 
         /// The angular rotation speed (in radians per second) for the `PlayerBot`.
-        static let angularSpeed = CGFloat.pi * 1.4
+        static let angularSpeed = CGFloat(Double.pi) * 1.4
         
         /// The radius of the `PlayerBot`'s physics body.
         static var physicsBodyRadius: CGFloat = 30.0
@@ -197,15 +197,15 @@ struct GameplayConfiguration {
     struct Flocking {
         /// Separation, alignment, and cohesion parameters for multiple `TaskBot`s.
         static let separationRadius: Float = 25.3
-        static let separationAngle = Float (3 * (Float.pi / 4))
+        static let separationAngle = Float (3 * Double.pi / 4)
         static let separationWeight: Float = 2.0
         
         static let alignmentRadius: Float = 43.333
-        static let alignmentAngle: Float = Float.pi / 2
+        static let alignmentAngle = Float(Double.pi / 4)
         static let alignmentWeight: Float = 1.667
         
         static let cohesionRadius: Float = 50.0
-        static let cohesionAngle: Float = Float.pi / 2
+        static let cohesionAngle = Float(Double.pi / 2)
         static let cohesionWeight: Float = 1.667
         
         static let agentSearchDistanceForFlocking: Float = 50.0

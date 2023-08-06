@@ -34,6 +34,9 @@ extension BaseScene: RPPreviewViewControllerDelegate, RPScreenRecorderDelegate {
     }
     
     func stopScreenRecording(withHandler handler:@escaping (() -> Void)) {
+        // Do nothing if screen recording hasn't been enabled.
+        guard screenRecordingToggleEnabled else { return }
+
         let sharedRecorder = RPScreenRecorder.shared()
 
         sharedRecorder.stopRecording { previewViewController, error in

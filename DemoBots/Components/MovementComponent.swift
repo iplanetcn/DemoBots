@@ -18,7 +18,7 @@ import GameplayKit
 
         For example:
             If the node is facing to the right of the level, supplying `isRelativeToOrientation = true`
-            and `float2(x: 1, y: 0)` will move the node forward - towards the right of the screen.
+            and `SIMD2<Float>(x: 1, y: 0)` will move the node forward - towards the right of the screen.
             Passing the same vector but `isRelativeToOrientation = false` will move the node to the top
             of the screen regardless of the node's orientation.
 */
@@ -270,7 +270,7 @@ class MovementComponent: GKComponent {
         // Forward: (dx: 1.0, dy: 0.0), Backward: (dx: -1.0, dy: 0.0)
         if relativeDisplacement.x < 0 {
             // The entity is moving backwards, add 180 degrees to the angle
-            angleRelativeToOrientation += Float.pi
+            angleRelativeToOrientation += Float(Double.pi)
         }
         
         // Calculate the components of a new vector with direction based off the `angleRelativeToOrientation`.

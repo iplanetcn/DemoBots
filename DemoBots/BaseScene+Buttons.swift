@@ -20,7 +20,7 @@ extension BaseScene: ButtonNodeResponderType {
     
     // MARK: ButtonNodeResponderType
     
-    func buttonTriggered(button: ButtonNode) {
+    @objc func buttonTriggered(button: ButtonNode) {
         switch button.buttonIdentifier! {
             case .home:
                 sceneManager.transitionToScene(identifier: .home)

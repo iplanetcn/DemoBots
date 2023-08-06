@@ -10,61 +10,51 @@ A subclass of `NSOperation` that maps the different states of an `NSOperation`
 import Foundation
 
 class SceneOperation: Operation {
-    // MARK: Types
-    
-    /**
-        Using the `@objc` prefix exposes this enum to the ObjC runtime,
-        allowing the use of `dynamic` on the `state` property.
-    */
-    @objc enum State: Int {
-        /// The `Operation` is ready to begin execution.
-        case ready
-        
-        /// The `Operation` is executing.
-        case executing
-        
-        /// The `Operation` has finished executing.
-        case finished
-        
-        /// The `Operation` has been cancelled.
-        case cancelled
+    private let lockQueue = DispatchQueue(label: "com.example.apple-samplecode.asyncoperation", attributes: .concurrent)
+
+    override var isAsynchronous: Bool {
+        return true
     }
-    
-    // MARK: Properties
-    
-    /// Marking `state` as dynamic allows this property to be key-value observed.
-    @objc dynamic var state = State.ready
-    
-    // MARK: NSOperation
-    
-    override var isExecuting: Bool {
-        return state == .executing
+
+    private var _isExecuting: Bool = false
+    override private(set) var isExecuting: Bool {
+        get {
+            return lockQueue.sync { () -> Bool in
+                return _isExecuting
+            }
+        }
+        set {
+            willChangeValue(forKey: "isExecuting")
+            lockQueue.sync(flags: [.barrier]) {
+                _isExecuting = newValue
+            }
+            didChangeValue(forKey: "isExecuting")
+        }
     }
-    
-    override var isFinished: Bool {
-        return state == .finished
+
+    private var _isFinished: Bool = false
+    override private(set) var isFinished: Bool {
+        get {
+            return lockQueue.sync { () -> Bool in
+                return _isFinished
+            }
+        }
+        set {
+            willChangeValue(forKey: "isFinished")
+            lockQueue.sync(flags: [.barrier]) {
+                _isFinished = newValue
+            }
+            didChangeValue(forKey: "isFinished")
+        }
     }
-    
-    override var isCancelled: Bool {
-        return state == .cancelled
+
+    override func start() {
+        isFinished = false
+        isExecuting = true
     }
-    
-    /**
-        Add the "state" key to the key value observable properties of `NSOperation`.
-    */
-    class func keyPathsForValuesAffectingIsReady() -> Set<String> {
-        return ["state"]
-    }
-    
-    class func keyPathsForValuesAffectingIsExecuting() -> Set<String> {
-        return ["state"]
-    }
-    
-    class func keyPathsForValuesAffectingIsFinished() -> Set<String> {
-        return ["state"]
-    }
-    
-    class func keyPathsForValuesAffectingIsCancelled() -> Set<String> {
-        return ["state"]
+
+    func finish() {
+        isExecuting = false
+        isFinished = true
     }
 }

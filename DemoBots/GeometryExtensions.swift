@@ -3,7 +3,7 @@
     See LICENSE.txt for this sample’s licensing information
     
     Abstract:
-    A series of extensions to provide convenience interoperation between `CGPoint` representations of geometric points (common in SpriteKit) and `float2` representations of points (common in GameplayKit).
+    A series of extensions to provide convenience interoperation between `CGPoint` representations of geometric points (common in SpriteKit) and `SIMD2<Float>` representations of points (common in GameplayKit).
 */
 
 import CoreGraphics
@@ -31,22 +31,12 @@ extension SIMD2 where Scalar == Float {
     }
 }
 
-/*
-    Extend `float2` to declare conformance to the `Equatable` protocol.
-    The conformance to the protocol is provided by the `==` operator function below.
-*/
-//extension float2: Equatable {
-//    static func ==(lhs: float2, rhs: float2) -> Bool {
-//        return lhs.x == rhs.x && lhs.y == rhs.y
-//    }
-//}
+/// An equality operator function to determine if two `SIMD2<Float>`s are the same.
+public func ==(lhs: SIMD2<Float>, rhs: SIMD2<Float>) -> Bool {
+    return lhs.x == rhs.x && lhs.y == rhs.y
+}
 
-/// An equality operator function to determine if two `float2`s are the same.
-//public func ==(lhs: float2, rhs: float2) -> Bool {
-//    return lhs.x == rhs.x && lhs.y == rhs.y
-//}
-
-// Extend `float2` to provide a convenience method for working with pathfinding graphs.
+// Extend `SIMD2<Float>` to provide a convenience method for working with pathfinding graphs.
 extension SIMD2 where Scalar == Float {
     /// Calculates the nearest point to this point on a line from `pointA` to `pointB`.
     func nearestPointOnLineSegment(lineSegment: (startPoint: SIMD2<Float>, endPoint: SIMD2<Float>)) -> SIMD2<Float> {

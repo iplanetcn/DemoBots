@@ -107,7 +107,6 @@ struct SceneMetadata {
     used as a dictionary key by `SceneManger`.
 */
 extension SceneMetadata: Hashable {
-    
     func hash(into hasher: inout Hasher) {
         hasher.combine(fileName.hashValue)
     }

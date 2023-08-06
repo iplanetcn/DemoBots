@@ -44,13 +44,15 @@ class GameControllerInputSource: ControlInputSourceType {
         let attackHandler: GCControllerButtonValueChangedHandler = { [unowned self] button, _, pressed in
             if pressed {
                 self.delegate?.controlInputSourceDidBeginAttacking(self)
-                
+
                 #if os(tvOS)
                 if let microGamepad = self.gameController.microGamepad, button == microGamepad.buttonA || button == microGamepad.buttonX {
                     self.gameStateDelegate?.controlInputSourceDidSelect(self)
                 }
                 #else
-                self.gameStateDelegate?.controlInputSourceDidSelect(self)
+                if let gamepad = self.gameController.gamepad, button == gamepad.buttonA || button == gamepad.buttonX {
+                    self.gameStateDelegate?.controlInputSourceDidSelect(self)
+                }
                 #endif
             }
             else {
@@ -66,20 +68,23 @@ class GameControllerInputSource: ControlInputSourceType {
         }
         #endif
     
-        // `GCExtendedGamepad` trigger handlers.
-        if let extendedGamepad = gameController.extendedGamepad {
-            
+        // `GCGamepad` button handlers.
+        if let gamepad = gameController.gamepad {
             /*
                 Assign an action to every button, even if this means that multiple
                 buttons provide the same functionality. It's better to have repeated
                 functionality than to have a button that doesn't do anything.
             */
-            extendedGamepad.buttonA.pressedChangedHandler = attackHandler
-            extendedGamepad.buttonB.pressedChangedHandler = attackHandler
-            extendedGamepad.buttonX.pressedChangedHandler = attackHandler
-            extendedGamepad.buttonY.pressedChangedHandler = attackHandler
-            extendedGamepad.leftShoulder.pressedChangedHandler = attackHandler
-            extendedGamepad.rightShoulder.pressedChangedHandler = attackHandler
+            gamepad.buttonA.pressedChangedHandler = attackHandler
+            gamepad.buttonB.pressedChangedHandler = attackHandler
+            gamepad.buttonX.pressedChangedHandler = attackHandler
+            gamepad.buttonY.pressedChangedHandler = attackHandler
+            gamepad.leftShoulder.pressedChangedHandler = attackHandler
+            gamepad.rightShoulder.pressedChangedHandler = attackHandler
+        }
+        
+        // `GCExtendedGamepad` trigger handlers.
+        if let extendedGamepad = gameController.extendedGamepad {
             extendedGamepad.rightTrigger.pressedChangedHandler = attackHandler
             extendedGamepad.leftTrigger.pressedChangedHandler  = attackHandler
         }
@@ -106,6 +111,11 @@ class GameControllerInputSource: ControlInputSourceType {
             microGamepad.dpad.valueChangedHandler = movementHandler
         }
         #endif
+        
+        // `GCGamepad` D-pad handler.
+        if let gamepad = gameController.gamepad {
+            gamepad.dpad.valueChangedHandler = movementHandler 
+        }
         
         // `GCExtendedGamepad` left thumbstick.
         if let extendedGamepad = gameController.extendedGamepad {
@@ -143,7 +153,7 @@ class GameControllerInputSource: ControlInputSourceType {
         
             This allows for continuous scrolling while using game controllers.
         */
-        guard let dpad = gameController.microGamepad?.dpad else { return }
+        guard let dpad = gameController.gamepad?.dpad else { return }
         let dpadDisplacement = SIMD2<Float>(x: dpad.xAxis.value, y: dpad.yAxis.value)
         
         if let inputDirection = ControlInputDirection(vector: dpadDisplacement) {

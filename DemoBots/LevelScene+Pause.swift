@@ -32,8 +32,8 @@ extension LevelScene {
     private var pauseNotificationNames: [NSNotification.Name] {
         #if os(OSX)
         return [
-           NSApplication.willResignActiveNotification,
-           NSWindow.didMiniaturizeNotification
+            NSApplication.willResignActiveNotification,
+            NSWindow.didMiniaturizeNotification
         ]
         #else
         return [

@@ -43,7 +43,7 @@ class LoadSceneOperation: SceneOperation, ProgressReporting {
         }
         
         // Mark the operation as executing.
-        state = .executing
+        super.start()
         
         // Load the scene into memory using `SKNode(fileNamed:)`.
         let scene = sceneMetadata.sceneType.init(fileNamed: sceneMetadata.fileName)!
@@ -55,6 +55,6 @@ class LoadSceneOperation: SceneOperation, ProgressReporting {
         // Update the progress object's completed unit count.
         progress.completedUnitCount = 1
         
-        state = .finished
+        super.finish()
     }
 }

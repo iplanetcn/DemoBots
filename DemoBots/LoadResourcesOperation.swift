@@ -44,18 +44,18 @@ class LoadResourcesOperation: SceneOperation, ProgressReporting {
             return
         }
         
-        // Mark the operation as executing.
-        state = .executing
-        
         // Begin loading the resources.
         loadableType.loadResources() { [unowned self] in
             // Mark the operation as complete once the resources are loaded.
             self.finish()
         }
+
+        // Mark the operation as executing.
+        super.start()
     }
     
-    func finish() {
+    override func finish() {
         progress.completedUnitCount = 1
-        state = .finished
+        super.finish()
     }
 }

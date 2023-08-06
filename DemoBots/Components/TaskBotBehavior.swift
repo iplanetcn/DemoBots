@@ -22,7 +22,7 @@ class TaskBotBehavior: GKBehavior {
         behavior.addAvoidObstaclesGoal(forScene: scene)
 
         // Find any nearby "bad" TaskBots to flock with.
-        let agentsToFlockWith: [GKAgent2D] = scene.entities.compactMap { entity in
+        let agentsToFlockWith: [GKAgent2D] = scene.entities.flatMap { entity in
             if let taskBot = entity as? TaskBot, !taskBot.isGood && taskBot.agent !== agent && taskBot.distanceToAgent(otherAgent: agent) <= GameplayConfiguration.Flocking.agentSearchDistanceForFlocking {
                 return taskBot.agent
             }
@@ -72,7 +72,7 @@ class TaskBotBehavior: GKBehavior {
         behavior.addTargetSpeedGoal(speed: agent.maxSpeed)
         behavior.addAvoidObstaclesGoal(forScene: scene)
         
-        // Convert the patrol path to an array of `float2`s.
+        // Convert the patrol path to an array of `SIMD2<Float>`s.
         
         let pathVectorPoints = patrolPathPoints.map { SIMD2<Float>($0) }
         

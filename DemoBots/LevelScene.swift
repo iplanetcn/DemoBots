@@ -50,7 +50,7 @@ class LevelScene: BaseScene, SKPhysicsContactDelegate {
 
     let playerBot = PlayerBot()
     var entities = Set<GKEntity>()
-    
+
     var lastUpdateTimeInterval: TimeInterval = 0
     let maximumUpdateDeltaTime: TimeInterval = 1.0 / 60.0
     
@@ -217,7 +217,7 @@ class LevelScene: BaseScene, SKPhysicsContactDelegate {
         */
         addTouchInputToScene()
         touchControlInputNode.hideThumbStickNodes = sceneManager.gameInput.isGameControllerConnected
-            
+
         // Start screen recording. See `LevelScene+ScreenRecording` for implementation.
         startScreenRecording()
         #endif
@@ -289,9 +289,9 @@ class LevelScene: BaseScene, SKPhysicsContactDelegate {
         }
         
         // Sort the entities in the scene by ascending y-position.
-        let ySortedEntities = entities.sorted {
-            let nodeA = $0.component(ofType: RenderComponent.self)!.node
-            let nodeB = $1.component(ofType: RenderComponent.self)!.node
+        let ySortedEntities = entities.sorted { lhs, rhs in
+            let nodeA = lhs.component(ofType: RenderComponent.self)!.node
+            let nodeB = rhs.component(ofType: RenderComponent.self)!.node
             
             return nodeA.position.y > nodeB.position.y
         }

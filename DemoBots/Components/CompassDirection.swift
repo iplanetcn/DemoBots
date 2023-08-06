@@ -27,7 +27,7 @@ enum CompassDirection: Int {
     /// The angle of rotation that the orientation represents.
     var zRotation: CGFloat {
         // Calculate the number of radians between each direction.
-        let stepSize = CGFloat.pi * 2 / CGFloat(CompassDirection.allDirections.count)
+        let stepSize = CGFloat(Double.pi * 2.0) / CGFloat(CompassDirection.allDirections.count)
         
         return CGFloat(self.rawValue) * stepSize
     }
